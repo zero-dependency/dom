@@ -7,12 +7,17 @@ type Children = (string | Node | HTMLElement)[]
 
 export function el<T extends keyof HTMLElementTagNameMap>(
   tag: T,
-  attributes?: Attributes<T>,
+  attributes?: Children | Attributes<T>,
   ...children: Children
 ): HTMLElementTagNameMap[T] {
   const el = document.createElement(tag)
-  Object.assign(el, attributes)
-  el.append(...children)
+  if (Array.isArray(attributes)) {
+    el.append(...attributes)
+  } else {
+    Object.assign(el, attributes)
+    el.append(...children)
+  }
+
   return el
 }
 
