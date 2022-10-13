@@ -1,7 +1,7 @@
 export function observeElement<T extends Element = Element>(
   selector: string,
   callback: (el: T) => void,
-  target: Node = document.body
+  target = document.body
 ): MutationObserver {
   const observer = new MutationObserver((mutations) => {
     for (const mutation of mutations) {
