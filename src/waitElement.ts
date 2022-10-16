@@ -1,6 +1,6 @@
 import { observeElement } from './observeElement.js'
 
-export function waitObserveElement<T extends Element = Element>(
+export function waitElement<T extends Element = Element>(
   selector: string,
   target = document.body
 ): Promise<T> {

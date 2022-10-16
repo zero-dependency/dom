@@ -28,3 +28,15 @@ export function text(str: string): Text {
 export function nbsp(): Text {
   return text('\u00a0')
 }
+
+export async function domReady(): Promise<void> {
+  return new Promise((resolve) => {
+    if (document.readyState == 'loading') {
+      document.addEventListener('DOMContentLoaded', () => resolve(), {
+        once: true
+      })
+    } else {
+      resolve()
+    }
+  })
+}
