@@ -11,7 +11,7 @@ type RequestMethods = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
 export class Fetcher {
   constructor(
     private readonly baseURL: string,
-    private readonly baseInit: FetcherInit
+    private readonly baseInit?: FetcherInit
   ) {}
 
   async request<T>(
@@ -19,7 +19,8 @@ export class Fetcher {
     init: FetcherRequest & { method: RequestMethods }
   ): Promise<T> {
     const url = new URL(path, this.baseURL)
-    return await fetcher<T>(url, { ...this.baseInit, ...init })
+    const headers = mergeHeaders(this.baseInit?.headers!, init.headers!)
+    return await fetcher<T>(url, { ...this.baseInit, ...init, headers })
   }
 
   async get<T>(path: string, init?: FetcherRequest): Promise<T> {
@@ -58,4 +59,22 @@ export class FetcherError<T> extends Error {
     this.response = response
     this.data = data
   }
+}
+
+function mergeHeaders(...sources: HeadersInit[]): Headers {
+  const result: Record<string, string> = {}
+
+  for (const source of sources) {
+    const headers = new Headers(source)
+
+    for (const [key, value] of headers.entries()) {
+      if (value === undefined || value === null) {
+        delete result[key]
+      } else {
+        result[key] = value
+      }
+    }
+  }
+
+  return new Headers(result)
 }
