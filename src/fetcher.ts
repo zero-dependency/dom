@@ -6,13 +6,33 @@ interface FetcherInit
 
 interface FetcherRequest extends Omit<RequestInit, 'method'> {}
 
-type RequestMethods = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
+const methods = [
+  'GET',
+  'POST',
+  'PUT',
+  'PATCH',
+  'DELETE'
+] as const
+
+type RequestMethods = typeof methods[number]
 
 export class Fetcher {
+  get: <T>(path: string, init?: FetcherRequest) => Promise<T>
+  post: <T>(path: string, init?: FetcherRequest) => Promise<T>
+  put: <T>(path: string, init?: FetcherRequest) => Promise<T>
+  patch: <T>(path: string, init?: FetcherRequest) => Promise<T>
+  delete: <T>(path: string, init?: FetcherRequest) => Promise<T>
+
   constructor(
     private readonly baseURL: string,
     private readonly baseInit?: FetcherInit
-  ) {}
+  ) {
+    for (const method of methods) {
+      // @ts-ignore
+      this[method.toLowerCase()] = (path: string, init?: FetcherRequest) =>
+        this.request(path, { ...init, method })
+    }
+  }
 
   async request<T>(
     path: string,
@@ -21,14 +41,6 @@ export class Fetcher {
     const url = new URL(path, this.baseURL)
     const headers = mergeHeaders(this.baseInit?.headers!, init.headers!)
     return await fetcher<T>(url, { ...this.baseInit, ...init, headers })
-  }
-
-  async get<T>(path: string, init?: FetcherRequest): Promise<T> {
-    return await this.request(path, { ...init, method: 'GET' })
-  }
-
-  async post<T>(path: string, init?: FetcherRequest): Promise<T> {
-    return await this.request(path, { ...init, method: 'POST' })
   }
 }
 
