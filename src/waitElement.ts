@@ -9,9 +9,9 @@ export function waitElement<T extends Element = Element>(
     if (el) {
       resolve(el)
     } else {
-      const observer = observeElement<T>(
+      observeElement<T>(
         selector,
-        (el) => {
+        (el, observer) => {
           observer.disconnect()
           resolve(el)
         },
