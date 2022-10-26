@@ -15,6 +15,7 @@ export function el<T extends keyof HTMLElementTagNameMap>(
     el.append(...attributes)
   } else {
     Object.assign(el, attributes)
+    Object.assign(el.style, attributes?.style)
     el.append(...children)
   }
 
