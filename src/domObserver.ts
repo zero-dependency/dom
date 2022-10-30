@@ -315,18 +315,23 @@ export function observeElement<T extends Element = Element>(
 }
 
 export function waitElement<T extends Element = Element>(
-  selector: string,
-  options?: ObservedOptions
-): Promise<[T, () => void]> {
+  selector: string
+): Promise<T> {
   return new Promise((resolve) => {
-    const disconnect = observeElement<T>(
-      selector,
-      (el, isConnected) => {
-        if (isConnected) {
-          resolve([el, disconnect])
-        }
-      },
-      options
-    )
+    const el = document.querySelector<T>(selector)
+    if (el) {
+      return resolve(el)
+    }
+
+    new MutationObserver((_, observer) => {
+      const elements = document.querySelectorAll<T>(selector)
+      for (const element of elements) {
+        resolve(element)
+        observer.disconnect()
+      }
+    }).observe(document.documentElement, {
+      childList: true,
+      subtree: true
+    })
   })
 }
