@@ -96,7 +96,7 @@ class DOMObserver extends Emitter<EventMap> {
     const parsedSelector = this.parseSelector(selector)
     const initialNodes = []
 
-    for (const selectorType of Object.keys(parsedSelector)) {
+    for (const selectorType of Object.keys(parsedSelector) as (SelectorsType)[]) {
       let observedSelectorType
 
       switch (selectorType) {
@@ -131,7 +131,7 @@ class DOMObserver extends Emitter<EventMap> {
     const result = super.on(selector, callback)
     this.processMutations(
       this,
-      initialNodes.map((node) => [node.parentElement, node])
+      initialNodes.map((node) => [node.parentElement, node as HTMLElement])
     )
 
     return result
@@ -145,7 +145,7 @@ class DOMObserver extends Emitter<EventMap> {
 
     const parsedSelector = this.parseSelector(selector)
 
-    for (const selectorType of Object.keys(parsedSelector)) {
+    for (const selectorType of Object.keys(parsedSelector) as (SelectorsType)[]) {
       let observedSelectorType
       switch (selectorType) {
         case 'ids':
