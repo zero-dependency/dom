@@ -315,21 +315,22 @@ export function observeElement<T extends Element = Element>(
 }
 
 export function waitElement<T extends Element = Element>(
-  selector: string
+  selector: string,
+  target = document.documentElement
 ): Promise<T> {
   return new Promise((resolve) => {
-    const el = document.querySelector<T>(selector)
+    const el = target.querySelector<T>(selector)
     if (el) {
       return resolve(el)
     }
 
     new MutationObserver((_, observer) => {
-      const elements = document.querySelectorAll<T>(selector)
+      const elements = target.querySelectorAll<T>(selector)
       for (const element of elements) {
         resolve(element)
         observer.disconnect()
       }
-    }).observe(document.documentElement, {
+    }).observe(target, {
       childList: true,
       subtree: true
     })
