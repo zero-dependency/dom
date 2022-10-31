@@ -1,22 +1,19 @@
 export function observeElement<T extends Element = Element>(
-  selector: string,
-  callback: (el: T) => void,
-  target = document.body
-): MutationObserver {
-  const observer = new MutationObserver((mutations) => {
+  el: T,
+  callback: (mutation: MutationRecord, observer: MutationObserver) => void,
+  options?: MutationObserverInit
+) {
+  const observe = new MutationObserver((mutations, observer) => {
     for (const mutation of mutations) {
-      const el = (mutation.target as T).querySelector<T>(selector)
-      if (el) {
-        callback(el)
-      }
+      callback(mutation, observer)
     }
   })
 
-  observer.observe(target, {
-    attributes: true,
+  observe.observe(el, {
     childList: true,
-    subtree: true
+    subtree: true,
+    ...options
   })
 
-  return observer
+  return observe
 }
