@@ -1,7 +1,7 @@
 export function debounce<T extends (...args: any[]) => void>(
   fn: T,
-  delay = 500
-): (this: ThisParameterType<T>, ...args: Parameters<T>) => void {
+  ms: number
+): (...args: Parameters<T>) => void {
   let timeoutId: ReturnType<typeof setTimeout>
 
   return (...args) => {
@@ -9,8 +9,6 @@ export function debounce<T extends (...args: any[]) => void>(
       clearTimeout(timeoutId)
     }
 
-    timeoutId = setTimeout(() => {
-      fn(...args)
-    }, delay)
+    timeoutId = setTimeout(() => fn(args), ms)
   }
 }
