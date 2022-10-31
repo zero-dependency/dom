@@ -42,6 +42,6 @@
     "vitest": "^0.23.4"
   },
   "dependencies": {
-    "@zero-dependency/emitter": "workspace:^1.1.1"
+    "@zero-dependency/emitter": "1.1.1"
   }
 }

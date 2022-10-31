@@ -6,11 +6,15 @@ specifiers:
   '@types/node': ^18.8.3
   '@vitest/coverage-c8': ^0.24.0
   '@vitest/ui': ^0.23.4
+  '@zero-dependency/emitter': 1.1.1
   jsdom: ^20.0.1
   typescript: ^4.8.4
   vite: ^3.1.6
   vite-plugin-dts: ^1.6.5
   vitest: ^0.23.4
+
+dependencies:
+  '@zero-dependency/emitter': 1.1.1
 
 devDependencies:
   '@crashmax/prettier-config': 2.0.4_kh24rxe7vdex46rsdybx5uv35u
@@ -529,6 +533,10 @@ packages:
     dependencies:
       sirv: 2.0.2
     dev: true
+
+  /@zero-dependency/emitter/1.1.1:
+    resolution: {integrity: sha512-bPF9QeEQdOhe1Bfpm+mqOS4JrajPiHTj5vMvOSMvZp5jZzzgd8lC87JL93xWGgL8Qb3E98JZkmnYJX3JdmrEIA==}
+    dev: false
 
   /abab/2.0.6:
     resolution: {integrity: sha512-j2afSsaIENvHZN2B8GOpF566vZ5WVk5opAiMTvWgaQT8DkbOqsTfvNAvHoRGU2zzP8cPoqys+xHTRDWW8L+/BA==}
