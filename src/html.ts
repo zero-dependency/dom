@@ -11,11 +11,17 @@ export function el<T extends keyof HTMLElementTagNameMap>(
   ...children: Children
 ): HTMLElementTagNameMap[T] {
   const el = document.createElement(tag)
-  if (Array.isArray(attributes)) {
+
+  if (typeof attributes === 'string') {
+    el.append(text(attributes))
+  } else if (Array.isArray(attributes)) {
     el.append(...attributes)
   } else {
     Object.assign(el, attributes)
     Object.assign(el.style, attributes?.style)
+  }
+
+  if (children.length) {
     el.append(...children)
   }
 
