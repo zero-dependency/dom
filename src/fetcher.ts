@@ -2,9 +2,9 @@ interface FetcherInit
   extends Pick<
     RequestInit,
     'headers' | 'credentials' | 'mode' | 'cache' | 'redirect' | 'referrerPolicy'
-  > {}
+  > { }
 
-interface FetcherRequest extends Omit<RequestInit, 'method'> {}
+interface FetcherRequest extends Omit<RequestInit, 'method'> { }
 
 const methods = [
   'GET',
@@ -15,13 +15,14 @@ const methods = [
 ] as const
 
 type RequestMethods = typeof methods[number]
+type FetcherMethod = <T>(path: string, init?: FetcherRequest) => Promise<T>
 
 export class Fetcher {
-  get: <T>(path: string, init?: FetcherRequest) => Promise<T>
-  post: <T>(path: string, init?: FetcherRequest) => Promise<T>
-  put: <T>(path: string, init?: FetcherRequest) => Promise<T>
-  patch: <T>(path: string, init?: FetcherRequest) => Promise<T>
-  delete: <T>(path: string, init?: FetcherRequest) => Promise<T>
+  get: FetcherMethod
+  post: FetcherMethod
+  put: FetcherMethod
+  patch: FetcherMethod
+  delete: FetcherMethod
 
   constructor(
     private readonly baseURL: string,
@@ -29,18 +30,30 @@ export class Fetcher {
   ) {
     for (const method of methods) {
       // @ts-ignore
-      this[method.toLowerCase()] = (path: string, init?: FetcherRequest) =>
-        this.request(path, { ...init, method })
+      this[method.toLowerCase()] = (path: string, init?: FetcherRequest) => {
+        return this.request(path, { ...init, method })
+      }
     }
+  }
+
+  extends(path: string, baseInit?: FetcherInit): Fetcher {
+    const { url, init } = this.fetcherParameters(path, baseInit)
+    return new Fetcher(url, init)
   }
 
   async request<T>(
     path: string,
-    init: FetcherRequest & { method: RequestMethods }
+    initRequest: FetcherRequest & { method: RequestMethods }
   ): Promise<T> {
-    const url = new URL(path, this.baseURL)
-    const headers = mergeHeaders(this.baseInit?.headers!, init.headers!)
-    return await fetcher<T>(url, { ...this.baseInit, ...init, headers })
+    const { url, init } = this.fetcherParameters(path, initRequest)
+    return await fetcher<T>(url, init)
+  }
+
+  private fetcherParameters(path: string, baseInit?: FetcherInit) {
+    const url = combineURLs(this.baseURL, path)
+    const headers = combineHeaders(this.baseInit?.headers, baseInit?.headers)
+    const init = { ...this.baseInit, ...baseInit, headers }
+    return { url, init }
   }
 }
 
@@ -73,7 +86,14 @@ export class FetcherError<T> extends Error {
   }
 }
 
-function mergeHeaders(...sources: HeadersInit[]): Headers {
+// https://github.com/axios/axios/blob/v1.x/lib/helpers/combineURLs.js
+function combineURLs(baseURL: string, path: string): string {
+  return path
+    ? baseURL.replace(/\/+$/, '') + '/' + path.replace(/^\/+/, '')
+    : baseURL
+}
+
+function combineHeaders(...sources: HeadersInit[]): Headers {
   const result: Record<string, string> = {}
 
   for (const source of sources) {
