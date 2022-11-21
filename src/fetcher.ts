@@ -2,9 +2,9 @@ interface FetcherInit
   extends Pick<
     RequestInit,
     'headers' | 'credentials' | 'mode' | 'cache' | 'redirect' | 'referrerPolicy'
-  > { }
+  > {}
 
-interface FetcherRequest extends Omit<RequestInit, 'method'> { }
+interface FetcherRequest extends Omit<RequestInit, 'method'> {}
 
 const methods = [
   'GET',
