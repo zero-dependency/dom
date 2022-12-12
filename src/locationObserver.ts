@@ -8,7 +8,7 @@ type Events = {
   popState: LocationCallback
 }
 
-class LocationObserver extends Emitter<Events> {
+export class LocationObserver extends Emitter<Events> {
   constructor() {
     super()
 
@@ -30,5 +30,3 @@ class LocationObserver extends Emitter<Events> {
     })
   }
 }
-
-export const locationObserver = new LocationObserver()
