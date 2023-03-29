@@ -47,3 +47,22 @@ export async function domReady(): Promise<void> {
     }
   })
 }
+
+export function isDisabled(element: HTMLElement): boolean {
+  return (
+    Boolean(element.getAttribute('disabled')) === true ||
+    Boolean(element.getAttribute('aria-disabled')) === true
+  )
+}
+
+export function addEventListener(
+  target: EventTarget,
+  eventName: string,
+  handler: EventListener,
+  options?: AddEventListenerOptions
+) {
+  target.addEventListener(eventName, handler, options)
+  return () => {
+    target.removeEventListener(eventName, handler, options)
+  }
+}
