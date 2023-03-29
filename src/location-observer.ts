@@ -1,14 +1,16 @@
 import { Emitter } from '@zero-dependency/emitter'
 
-type LocationCallback = (location: Location, state: any) => void
+type LocationCallback<T = any> = (location: Location, args: T) => void
 
-type Events = {
-  pushState: LocationCallback
-  replaceState: LocationCallback
-  popState: LocationCallback
+type Events<T> = {
+  pushState: LocationCallback<T>
+  replaceState: LocationCallback<T>
+  popState: LocationCallback<
+    Omit<PopStateEvent, 'state'> & { readonly state: T }
+  >
 }
 
-export class LocationObserver extends Emitter<Events> {
+export class LocationObserver<T> extends Emitter<Events<T>> {
   constructor() {
     super()
 
@@ -25,8 +27,8 @@ export class LocationObserver extends Emitter<Events> {
       this.emit('replaceState', location, args[0])
     }
 
-    window.addEventListener('popstate', ({ state }) => {
-      this.emit('popState', location, state)
+    window.addEventListener('popstate', (event) => {
+      this.emit('popState', location, event)
     })
   }
 }
