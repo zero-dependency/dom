@@ -54,15 +54,3 @@ export function isDisabled(element: HTMLElement): boolean {
     Boolean(element.getAttribute('aria-disabled')) === true
   )
 }
-
-export function addEventListener(
-  target: EventTarget,
-  eventName: string,
-  handler: EventListener,
-  options?: AddEventListenerOptions
-) {
-  target.addEventListener(eventName, handler, options)
-  return () => {
-    target.removeEventListener(eventName, handler, options)
-  }
-}

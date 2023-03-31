@@ -1,6 +1,5 @@
 import { describe, expect, expectTypeOf, test, vi } from 'vitest'
 import {
-  addEventListener,
   domReady,
   el,
   isDisabled,
@@ -85,21 +84,4 @@ describe('isDisabled', () => {
   //   const div = el('div')
   //   expect(isDisabled(div)).toBe(false)
   // })
-})
-
-describe('addEventListener', () => {
-  test('should be defined', () => {
-    expect(addEventListener).toBeDefined()
-  })
-
-  test('should add an event listener', () => {
-    const div = el('div')
-    const handler = vi.fn()
-    const remove = addEventListener(div, 'click', handler)
-    div.click()
-    expect(handler).toBeCalledTimes(1)
-    remove()
-    div.click()
-    expect(handler).toBeCalledTimes(1)
-  })
 })
