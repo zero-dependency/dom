@@ -19,3 +19,23 @@ pnpm add @zero-dependency/dom
 ```
 
 ## Usage
+
+```js
+import { el, observeElement, waitElement } from '@zero-dependency/dom'
+
+// createElement
+const element = el('div', { class: 'foo' }, 'Hello World')
+document.body.appendChild(element)
+
+// observeElement
+observeElement(element, (mutation, observer) => {
+  console.log(mutation.target.textContent) // 'hello world'
+  observer.disconnect()
+})
+
+element.textContent = element.textContent.toLowerCase() // 'hello world'
+
+// waitElement
+const el = await waitElement('div.card')
+console.log(el) // <div class="card">...</div>
+```
