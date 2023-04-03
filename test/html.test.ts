@@ -1,5 +1,5 @@
 import { describe, expect, expectTypeOf } from 'vitest'
-import { domReady, el, nbsp, text } from '../src/html.js'
+import { el, nbsp, text } from '../src/html.js'
 
 describe('el', (test) => {
   test('should be defined', () => {
@@ -44,16 +44,5 @@ describe('text', (test) => {
 
   test('should create a text node', () => {
     expect(text('foo')).toBeInstanceOf(Text)
-  })
-})
-
-describe('domReady', (test) => {
-  test('should be defined', () => {
-    expect(domReady).toBeDefined()
-  })
-
-  // uncovered lines in src/html.ts:42-44
-  test('should return a promise', () => {
-    expect(domReady()).toBeInstanceOf(Promise)
   })
 })
