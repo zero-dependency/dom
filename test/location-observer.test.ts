@@ -16,6 +16,7 @@ describe('LocationObserver', (test) => {
     })
 
     history.pushState({ id: 1 }, '', '/foo')
+    locationObserver.off('pushState')
   })
 
   test('replaceState', () => {
@@ -26,7 +27,20 @@ describe('LocationObserver', (test) => {
     })
 
     history.replaceState({ id: 2 }, '', '/bar')
+    locationObserver.off('replaceState')
   })
 
-  // uncovered `popState`
+  test('popState', () => {
+    locationObserver.on('popState', (location, event) => {
+      expect(event.state).toEqual({ id: 3 })
+      expect(location.pathname).toBe('/bar')
+    })
+
+    window.dispatchEvent(
+      new PopStateEvent('popstate', {
+        state: { id: 3 }
+      })
+    )
+    locationObserver.off('popState')
+  })
 })

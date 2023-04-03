@@ -40,8 +40,5 @@
     "vite": "^4.2.1",
     "vite-plugin-dts": "^2.1.0",
     "vitest": "^0.29.8"
-  },
-  "dependencies": {
-    "@zero-dependency/emitter": "workspace:1.1.5"
   }
 }
