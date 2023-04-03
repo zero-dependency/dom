@@ -10,6 +10,14 @@ type Events<T> = {
   >
 }
 
+/**
+ * Observe changes to the location
+ * @example
+ * const observer = new LocationObserver<{ id: string }>()
+ * observer.on('pushState', (location, state) => {
+ *   console.log(state.id)
+ * })
+ */
 export class LocationObserver<T> extends Emitter<Events<T>> {
   constructor() {
     super()

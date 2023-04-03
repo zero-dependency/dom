@@ -1,5 +1,12 @@
 type Disconnect = () => void
 
+/**
+ * Observe mutations on an element
+ * @param el The element to observe
+ * @param callback The callback to call when a mutation occurs
+ * @param options The options to pass to the `MutationObserver`
+ * @returns A function to disconnect the observer
+ */
 export function observeElement<T extends Element = Element>(
   el: T,
   callback: (mutation: MutationRecord, observer: MutationObserver) => void,
@@ -20,21 +27,23 @@ export function observeElement<T extends Element = Element>(
   return () => observe.disconnect()
 }
 
+/**
+ * Wait for an element to appear in the DOM
+ * @param selector The selector to wait for
+ * @param target The element to search in
+ * @returns A promise that resolves when the element is found
+ */
 export function waitElement<T extends Element = Element>(
   selector: string,
   target = document.documentElement
 ): Promise<T> {
   return new Promise((resolve) => {
-    function resolveElement() {
+    observeElement(target, (_, observer) => {
       const el = target.querySelector<T>(selector)
       if (el) {
+        observer.disconnect()
         resolve(el)
       }
-    }
-
-    observeElement(target, (_, observer) => {
-      resolveElement()
-      observer.disconnect()
     })
   })
 }

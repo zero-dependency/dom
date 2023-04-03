@@ -5,9 +5,23 @@ type Attributes<T extends keyof HTMLElementTagNameMap> = Partial<{
 
 type Children = (string | Node | HTMLElement)[]
 
+/**
+ * Create an element
+ * @param tag The tag name of the element to create
+ * @param attributes The attributes or children to set on the element
+ * @param children The children to append to the element
+ * @returns The created element
+ * @example
+ * el('div', { id: 'foo' }, 'Hello world')
+ * el('div', 'Hello world')
+ * el('div', [el('span', 'Hello'), el('span', 'world')])
+ * el('div', el('span', 'Hello world'))
+ * el('div', el('span', 'Hello'), el('span', 'world'))
+ * el('div', el('span', 'Hello world'), 'world')
+ */
 export function el<T extends keyof HTMLElementTagNameMap>(
   tag: T,
-  attributes?: Children | Attributes<T>,
+  attributes?: Attributes<T> | Children,
   ...children: Children
 ): HTMLElementTagNameMap[T] {
   const el = document.createElement(tag)
@@ -28,14 +42,25 @@ export function el<T extends keyof HTMLElementTagNameMap>(
   return el
 }
 
-export function text(str: string): Text {
-  return document.createTextNode(str)
+/**
+ * Create a text node
+ * @param text The string to create a text node from
+ */
+export function text(text: string): Text {
+  return document.createTextNode(text)
 }
 
+/**
+ * A non-breaking space
+ */
 export function nbsp(): Text {
   return text('\u00a0')
 }
 
+/**
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Window/DOMContentLoaded_event
+ * @returns A promise that resolves when the DOM is ready
+ */
 export async function domReady(): Promise<void> {
   return new Promise((resolve) => {
     if (document.readyState == 'loading') {
@@ -46,11 +71,4 @@ export async function domReady(): Promise<void> {
       resolve()
     }
   })
-}
-
-export function isDisabled(element: HTMLElement): boolean {
-  return (
-    Boolean(element.getAttribute('disabled')) === true ||
-    Boolean(element.getAttribute('aria-disabled')) === true
-  )
 }

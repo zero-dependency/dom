@@ -1,13 +1,7 @@
-import { describe, expect, expectTypeOf, test, vi } from 'vitest'
-import {
-  domReady,
-  el,
-  isDisabled,
-  nbsp,
-  text
-} from '../src/html.js'
+import { describe, expect, expectTypeOf } from 'vitest'
+import { domReady, el, nbsp, text } from '../src/html.js'
 
-describe('el', () => {
+describe('el', (test) => {
   test('should be defined', () => {
     expect(el).toBeDefined()
   })
@@ -32,7 +26,7 @@ describe('el', () => {
   })
 })
 
-describe('nbsp', () => {
+describe('nbsp', (test) => {
   test('should be defined', () => {
     expect(nbsp).toBeDefined()
   })
@@ -43,7 +37,7 @@ describe('nbsp', () => {
   })
 })
 
-describe('text', () => {
+describe('text', (test) => {
   test('should be defined', () => {
     expect(text).toBeDefined()
   })
@@ -53,7 +47,7 @@ describe('text', () => {
   })
 })
 
-describe('domReady', () => {
+describe('domReady', (test) => {
   test('should be defined', () => {
     expect(domReady).toBeDefined()
   })
@@ -62,26 +56,4 @@ describe('domReady', () => {
   test('should return a promise', () => {
     expect(domReady()).toBeInstanceOf(Promise)
   })
-})
-
-describe('isDisabled', () => {
-  test('should be defined', () => {
-    expect(isDisabled).toBeDefined()
-  })
-
-  // https://github.com/vitest-dev/vitest/issues/664
-  // test('should return true when element is aria-disabled', () => {
-  //   const div = el('div', { ariaDisabled: 'true' })
-  //   expect(isDisabled(div)).toBe(true)
-  // })
-
-  // test('should return true when element is disabled', () => {
-  //   const input = el('input', { disabled: true })
-  //   expect(isDisabled(input)).toBe(true)
-  // })
-
-  // test('should return false when element is not disabled', () => {
-  //   const div = el('div')
-  //   expect(isDisabled(div)).toBe(false)
-  // })
 })
