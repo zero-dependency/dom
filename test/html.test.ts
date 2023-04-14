@@ -1,5 +1,5 @@
-import { describe, expect, expectTypeOf } from 'vitest'
-import { el, nbsp, text } from '../src/html.js'
+import { describe, expect, expectTypeOf, vi } from 'vitest'
+import { el, nbsp, text, addEvent } from '../src/html.js'
 
 describe('el', (test) => {
   test('should be defined', () => {
@@ -44,5 +44,44 @@ describe('text', (test) => {
 
   test('should create a text node', () => {
     expect(text('foo')).toBeInstanceOf(Text)
+  })
+})
+
+describe('addEvent', (test) => {
+  test('should be defined', () => {
+    expect(addEvent).toBeDefined()
+  })
+
+  test('should add an event listener', () => {
+    const el = document.createElement('div')
+    const handler = vi.fn()
+
+    addEvent(el, 'click', handler)
+    el.click()
+
+    expect(handler).toBeCalled()
+  })
+
+  test('should add an event listener with options', () => {
+    const el = document.createElement('div')
+    const handler = vi.fn()
+
+    addEvent(el, 'click', handler, { once: true })
+    el.click()
+    el.click()
+
+    expect(handler).toBeCalledTimes(1)
+  })
+
+  test('should remove an event listener', () => {
+    const el = document.createElement('div')
+    const handler = vi.fn()
+
+    const remove = addEvent(el, 'click', handler)
+    el.click()
+    remove()
+    el.click()
+
+    expect(handler).toBeCalledTimes(1)
   })
 })

@@ -56,3 +56,23 @@ export function text(text: string): Text {
 export function nbsp(): Text {
   return text('\u00a0')
 }
+
+type WindowEvent<T extends string> = T extends keyof WindowEventMap
+  ? WindowEventMap[T]
+  : Event
+
+export function addEvent<T extends string>(
+  el: HTMLElement,
+  type: T,
+  callback: (event: WindowEvent<T>) => void,
+  options?: boolean | AddEventListenerOptions
+): () => void
+export function addEvent(
+  el: HTMLElement,
+  type: string,
+  cb: (event: Event) => void,
+  options?: boolean | AddEventListenerOptions
+): () => void {
+  el.addEventListener(type, cb, options)
+  return () => el.removeEventListener(type, cb, options)
+}
