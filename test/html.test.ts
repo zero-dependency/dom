@@ -1,5 +1,5 @@
 import { describe, expect, expectTypeOf, vi } from 'vitest'
-import { el, nbsp, text, addEvent } from '../src/html.js'
+import { addEvent, el, nbsp, text } from '../src/html.js'
 
 describe('el', (test) => {
   test('should be defined', () => {
