@@ -61,6 +61,13 @@ type WindowEvent<T extends string> = T extends keyof WindowEventMap
   ? WindowEventMap[T]
   : Event
 
+/**
+ * Add an event listener to an element
+ * @param el The element to add the event listener to
+ * @param type The event type to listen for
+ * @param callback The callback to call when the event is fired
+ * @param options The options to pass to `addEventListener`
+ */
 export function addEvent<T extends string>(
   el: HTMLElement,
   type: T,
