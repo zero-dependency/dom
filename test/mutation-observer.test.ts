@@ -1,5 +1,5 @@
 import { describe, expect } from 'vitest'
-import { observeElement, waitElement } from '../src/mutation-observers.js'
+import { observeElement, waitElement } from '../src/mutation-observer.js'
 
 describe('observeElement', (test) => {
   test('should observe element', async () => {
