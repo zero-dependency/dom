@@ -1,6 +1,8 @@
+import * as CSS from 'csstype'
+
 // prettier-ignore
 type Attributes<T extends keyof HTMLElementTagNameMap> = Partial<{
-  style: Partial<CSSStyleDeclaration>
+  style: CSS.Properties
 } & Omit<HTMLElementTagNameMap[T], 'style'>>
 
 type Children = (string | Node | HTMLElement)[]
