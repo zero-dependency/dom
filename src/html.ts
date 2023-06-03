@@ -23,7 +23,7 @@ type Children = (string | Node | HTMLElement)[]
  */
 export function el<T extends keyof HTMLElementTagNameMap>(
   tag: T,
-  attributes?: Attributes<T> | Children,
+  attributes?: Attributes<T> | Children | HTMLElement,
   ...children: Children
 ): HTMLElementTagNameMap[T] {
   const el = document.createElement(tag)
