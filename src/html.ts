@@ -8,11 +8,12 @@ type Attributes<T extends keyof HTMLElementTagNameMap> = Partial<{
 type Children = (string | Node | HTMLElement)[]
 
 /**
- * Create an element
- * @param tag The tag name of the element to create
- * @param attributes The attributes or children to set on the element
- * @param children The children to append to the element
- * @returns The created element
+ * Creates a new HTML element of the specified type and with the given attributes and children nodes.
+ *
+ * @param {T} tag - The type of HTML element to create.
+ * @param {Attributes<T> | Children | HTMLElement} [attributes] - The attributes or children nodes to add to the element.
+ * @param {...Children} children - The children nodes to add to the element.
+ * @return {HTMLElementTagNameMap[T]} The newly created HTML element of the specified type.
  * @example
  * el('div', { id: 'foo' }, 'Hello world')
  * el('div', 'Hello world')
@@ -31,7 +32,7 @@ export function el<T extends keyof HTMLElementTagNameMap>(
   if (typeof attributes === 'string') {
     el.append(text(attributes))
   } else if (Array.isArray(attributes)) {
-    el.append(...attributes)
+    children.unshift(...attributes)
   } else {
     Object.assign(el, attributes)
     Object.assign(el.style, attributes?.style)
@@ -45,43 +46,20 @@ export function el<T extends keyof HTMLElementTagNameMap>(
 }
 
 /**
- * Create a text node
- * @param text The string to create a text node from
+ * Creates a new Text node with the provided text.
+ *
+ * @param {string} text - The text to create the Text node with.
+ * @return {Text} A new Text node with the provided text.
  */
 export function text(text: string): Text {
   return document.createTextNode(text)
 }
 
 /**
- * A non-breaking space
+ * Returns a Text object containing a non-breaking space character.
+ *
+ * @return {Text} A Text object containing a non-breaking space character.
  */
 export function nbsp(): Text {
   return text('\u00a0')
-}
-
-type WindowEvent<T extends string> = T extends keyof WindowEventMap
-  ? WindowEventMap[T]
-  : Event
-
-/**
- * Add an event listener to an element
- * @param el The element to add the event listener to
- * @param type The event type to listen for
- * @param callback The callback to call when the event is fired
- * @param options The options to pass to `addEventListener`
- */
-export function addEvent<T extends string>(
-  el: HTMLElement,
-  type: T,
-  callback: (event: WindowEvent<T>) => void,
-  options?: boolean | AddEventListenerOptions
-): () => void
-export function addEvent(
-  el: HTMLElement,
-  type: string,
-  cb: (event: Event) => void,
-  options?: boolean | AddEventListenerOptions
-): () => void {
-  el.addEventListener(type, cb, options)
-  return () => el.removeEventListener(type, cb, options)
 }

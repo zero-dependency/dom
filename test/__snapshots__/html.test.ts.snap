@@ -1,0 +1,43 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`el > snapshot example test 1`] = `
+<div
+  id="foo"
+  style="background: red;"
+>
+  Hello world
+</div>
+`;
+
+exports[`el > snapshot example test 2`] = `
+<div>
+  Hello world
+</div>
+`;
+
+exports[`el > snapshot example test 3`] = `
+<div>
+  <span>
+    Hello
+  </span>
+  <span>
+    world
+  </span>
+</div>
+`;
+
+exports[`el > snapshot example test 4`] = `<div />`;
+
+exports[`el > snapshot example test 5`] = `
+<div>
+  <span>
+    world
+  </span>
+</div>
+`;
+
+exports[`el > snapshot example test 6`] = `
+<div>
+  world
+</div>
+`;

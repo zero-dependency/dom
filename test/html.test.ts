@@ -1,5 +1,5 @@
-import { describe, expect, expectTypeOf, vi } from 'vitest'
-import { addEvent, el, nbsp, text } from '../src/html.js'
+import { describe, expect, expectTypeOf } from 'vitest'
+import { el, nbsp, text } from '../src/html.js'
 
 describe('el', (test) => {
   test('should be defined', () => {
@@ -24,6 +24,21 @@ describe('el', (test) => {
     expect(el('div', 'foo', 'bar').textContent).toBe('foobar')
     expect(el('div', ['foo', 'bar']).textContent).toBe('foobar')
   })
+
+  test('snapshot example test', () => {
+    expect(
+      el('div', { id: 'foo', style: { background: 'red' } }, 'Hello world')
+    ).toMatchSnapshot()
+    expect(el('div', 'Hello world')).toMatchSnapshot()
+    expect(
+      el('div', [el('span', 'Hello'), el('span', 'world')])
+    ).toMatchSnapshot()
+    expect(el('div', el('span', 'Hello world'))).toMatchSnapshot()
+    expect(
+      el('div', el('span', 'Hello'), el('span', 'world'))
+    ).toMatchSnapshot()
+    expect(el('div', el('span', 'Hello world'), 'world')).toMatchSnapshot()
+  })
 })
 
 describe('nbsp', (test) => {
@@ -44,44 +59,5 @@ describe('text', (test) => {
 
   test('should create a text node', () => {
     expect(text('foo')).toBeInstanceOf(Text)
-  })
-})
-
-describe('addEvent', (test) => {
-  test('should be defined', () => {
-    expect(addEvent).toBeDefined()
-  })
-
-  test('should add an event listener', () => {
-    const el = document.createElement('div')
-    const handler = vi.fn()
-
-    addEvent(el, 'click', handler)
-    el.click()
-
-    expect(handler).toBeCalled()
-  })
-
-  test('should add an event listener with options', () => {
-    const el = document.createElement('div')
-    const handler = vi.fn()
-
-    addEvent(el, 'click', handler, { once: true })
-    el.click()
-    el.click()
-
-    expect(handler).toBeCalledTimes(1)
-  })
-
-  test('should remove an event listener', () => {
-    const el = document.createElement('div')
-    const handler = vi.fn()
-
-    const remove = addEvent(el, 'click', handler)
-    el.click()
-    remove()
-    el.click()
-
-    expect(handler).toBeCalledTimes(1)
   })
 })
