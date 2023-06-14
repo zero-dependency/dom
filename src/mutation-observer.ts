@@ -1,11 +1,16 @@
 type Disconnect = () => void
 
 /**
- * Observe mutations on an element
- * @param el The element to observe
- * @param callback The callback to call when a mutation occurs
- * @param options The options to pass to the `MutationObserver`
- * @returns A function to disconnect the observer
+ * Observes changes to an element and invokes a callback function for each mutation.
+ *
+ * @param {T extends Element} el - the element to observe
+ * @param {(mutation: MutationRecord, observer: MutationObserver) => void} callback - the function to call when a mutation occurs
+ * @param {MutationObserverInit} [options] - optional configuration options for the MutationObserver
+ * @returns {Disconnect} a function that disconnects the observer
+ * @example
+ * const disconnect = observeElement(document.body, (mutation, observer) => {
+ *   console.log(mutation)
+ * })
  */
 export function observeElement<T extends Element = Element>(
   el: T,
@@ -28,14 +33,18 @@ export function observeElement<T extends Element = Element>(
 }
 
 /**
- * Wait for an element to appear in the DOM
- * @param selector The selector to wait for
- * @param target The element to search in
- * @returns A promise that resolves when the element is found
+ * Returns a Promise that resolves with the first element matching the given selector
+ * in the specified target, or rejects if no matches are found.
+ *
+ * @param {string} selector - The CSS selector to match.
+ * @param {Element} [target=document.documentElement] - The element to search in.
+ * @returns {Promise<T>} A Promise that resolves with the first matching element.
+ * @example
+ * const el = await waitElement('.foo')
  */
 export function waitElement<T extends Element = Element>(
   selector: string,
-  target = document.documentElement
+  target: Element = document.documentElement
 ): Promise<T> {
   return new Promise((resolve) => {
     observeElement(target, (_, observer) => {
