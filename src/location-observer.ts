@@ -10,8 +10,9 @@ type Events<T> = {
  * the specified callbacks when the user navigates to a new page or updates the
  * current page's state.
  *
- * @param {Events<T>} events - An object that contains optional callback functions
- * for push and replace actions.
+ * @param {Events<T>} events
+ * An object that contains optional callback functions for push and replace actions.
+ *
  * @example
  * locationObserver<{ id: string }>({
  *   onPush: (location, args) => {},
