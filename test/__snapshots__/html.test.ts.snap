@@ -26,10 +26,19 @@ exports[`el > snapshot example test 3`] = `
 </div>
 `;
 
-exports[`el > snapshot example test 4`] = `<div />`;
+exports[`el > snapshot example test 4`] = `
+<div>
+  <span>
+    Hello world
+  </span>
+</div>
+`;
 
 exports[`el > snapshot example test 5`] = `
 <div>
+  <span>
+    Hello
+  </span>
   <span>
     world
   </span>
@@ -38,6 +47,17 @@ exports[`el > snapshot example test 5`] = `
 
 exports[`el > snapshot example test 6`] = `
 <div>
+  <span>
+    Hello world
+  </span>
+  world
+</div>
+`;
+
+exports[`el > snapshot example test 7`] = `
+<div>
+  Hello
+   
   world
 </div>
 `;

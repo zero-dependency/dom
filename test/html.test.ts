@@ -38,6 +38,7 @@ describe('el', (test) => {
       el('div', el('span', 'Hello'), el('span', 'world'))
     ).toMatchSnapshot()
     expect(el('div', el('span', 'Hello world'), 'world')).toMatchSnapshot()
+    expect(el('div', 'Hello', nbsp(), text('world'))).toMatchSnapshot()
   })
 })
 

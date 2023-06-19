@@ -1,7 +1,7 @@
 import * as CSS from 'csstype'
 
 // prettier-ignore
-type Attributes<T extends keyof HTMLElementTagNameMap> = Partial<{
+type Properties<T extends keyof HTMLElementTagNameMap> = Partial<{
   style: CSS.Properties
 } & Omit<HTMLElementTagNameMap[T], 'style'>>
 
@@ -13,8 +13,8 @@ type Children = (string | Node | HTMLElement)[]
  * @param {T} tag
  * The type of HTML element to create.
  *
- * @param {Attributes<T> | Children | HTMLElement} [attributes]
- * The attributes or children nodes to add to the element.
+ * @param {Properties<T> | Children | HTMLElement} [props]
+ * The properties or children nodes to add to the element.
  *
  * @param {...Children} children
  * The children nodes to add to the element.
@@ -32,23 +32,23 @@ type Children = (string | Node | HTMLElement)[]
  */
 export function el<T extends keyof HTMLElementTagNameMap>(
   tag: T,
-  attributes?: Attributes<T> | Children | HTMLElement,
+  props?: Properties<T> | Children | HTMLElement,
   ...children: Children
 ): HTMLElementTagNameMap[T] {
   const el = document.createElement(tag)
 
-  if (typeof attributes === 'string') {
-    el.append(text(attributes))
-  } else if (Array.isArray(attributes)) {
-    children.unshift(...attributes)
+  if (props instanceof Node) {
+    el.append(props)
+  } else if (typeof props === 'string') {
+    el.append(text(props))
+  } else if (Array.isArray(props)) {
+    el.append(...props)
   } else {
-    Object.assign(el, attributes)
-    Object.assign(el.style, attributes?.style)
+    Object.assign(el, props)
+    Object.assign(el.style, props?.style)
   }
 
-  if (children.length) {
-    el.append(...children)
-  }
+  el.append(...children)
 
   return el
 }
