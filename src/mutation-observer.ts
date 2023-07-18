@@ -44,6 +44,7 @@ interface WaitElementParams {
   selector: string
   target?: Element
   rejectAfterMs?: number
+  signal?: AbortSignal
 }
 
 /**
@@ -73,7 +74,8 @@ interface WaitElementParams {
 export function waitElement<T extends Element = Element>({
   selector,
   target = document.body,
-  rejectAfterMs
+  rejectAfterMs,
+  signal
 }: WaitElementParams): Promise<T> {
   return new Promise((resolve, reject) => {
     const disconnect = observeElement(target, (_, observer) => {
@@ -84,11 +86,37 @@ export function waitElement<T extends Element = Element>({
       }
     })
 
+    const listeners: {
+      timeout: ReturnType<typeof setTimeout> | null
+      abort: (() => void) | null
+    } = {
+      timeout: null,
+      abort: null
+    }
+
+    const dispose = (message: string) => {
+      if (listeners.timeout) {
+        clearTimeout(listeners.timeout)
+      }
+
+      if (listeners.abort) {
+        signal.removeEventListener('abort', listeners.abort)
+      }
+
+      disconnect()
+      reject(new Error(message))
+    }
+
     if (rejectAfterMs > 0) {
-      setTimeout(() => {
-        disconnect()
-        reject(new Error(`waitElement rejected after ${rejectAfterMs}ms`))
-      }, rejectAfterMs)
+      listeners.timeout = setTimeout(
+        () => dispose(`waitElement rejected after ${rejectAfterMs}ms`),
+        rejectAfterMs
+      )
+    }
+
+    if (signal && !signal.aborted) {
+      listeners.abort = () => dispose(signal.reason)
+      signal.addEventListener('abort', listeners.abort)
     }
   })
 }

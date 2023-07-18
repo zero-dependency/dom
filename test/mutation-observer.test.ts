@@ -30,4 +30,30 @@ describe('waitElement', (test) => {
       waitElement({ selector: 'div', rejectAfterMs: 100 })
     ).rejects.toThrowError('waitElement rejected after 100ms')
   })
+
+  test('reject abort controller', async () => {
+    await expect(() => {
+      const abortController = new AbortController()
+      const promise = waitElement({
+        selector: 'div',
+        signal: abortController.signal
+      })
+      abortController.abort('Aborted')
+      return promise
+    }).rejects.toThrowError('Aborted')
+
+    await expect(async () => {
+      const abortController = new AbortController()
+      const promise = waitElement({
+        selector: 'dev',
+        rejectAfterMs: 100,
+        signal: abortController.signal
+      })
+
+      await new Promise((resolve) => setTimeout(resolve, 100))
+      abortController.abort('Abort?')
+      abortController.abort('Abort??')
+      return promise
+    }).rejects.toThrowError('waitElement rejected after 100ms')
+  })
 })
