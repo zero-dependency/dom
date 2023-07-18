@@ -40,33 +40,55 @@ export function observeElement<T extends Element = Element>(
   return () => observe.disconnect()
 }
 
+interface WaitElementParams {
+  selector: string
+  target?: Element
+  rejectAfterMs?: number
+}
+
 /**
- * Returns a Promise that resolves with the first element matching the given selector
- * in the specified target, or rejects if no matches are found.
+ * Waits for the specified element to be present in the DOM and returns it.
  *
- * @param {string} selector
- * The CSS selector to match.
+ * @param {WaitElementParams} params
+ * The parameters for waiting and locating the element.
  *
- * @param {Element} [target=document.documentElement]
- * The element to search in.
+ * @param {string} params.selector
+ * The CSS selector to locate the element.
  *
- * @returns {Promise<T>}
- * A Promise that resolves with the first matching element.
+ * @param {Element} [params.target=document.body]
+ * The target element to search for the element in.
+ *
+ * @param {number} [params.rejectAfterMs]
+ * The time in milliseconds after which to reject the promise if the element is not found.
+ *
+ * @return {Promise<T>}
+ * A promise that resolves with the found element.
+ *
+ * @throws {Error}
+ * If the promise is rejected due to the element not being found within the specified time.
  *
  * @example
- * const el = await waitElement('.foo')
+ * const fooElement = await waitElement({ selector: '.foo' })
  */
-export function waitElement<T extends Element = Element>(
-  selector: string,
-  target: Element = document.body
-): Promise<T> {
-  return new Promise((resolve) => {
-    observeElement(target, (_, observer) => {
+export function waitElement<T extends Element = Element>({
+  selector,
+  target = document.body,
+  rejectAfterMs
+}: WaitElementParams): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const disconnect = observeElement(target, (_, observer) => {
       const el = target.querySelector<T>(selector)
       if (el) {
         observer.disconnect()
         resolve(el)
       }
     })
+
+    if (rejectAfterMs > 0) {
+      setTimeout(() => {
+        disconnect()
+        reject(new Error(`waitElement rejected after ${rejectAfterMs}ms`))
+      }, rejectAfterMs)
+    }
   })
 }

@@ -21,7 +21,13 @@ describe('waitElement', (test) => {
     const div = document.createElement('div')
     div.classList.add('foo')
     setTimeout(() => document.body.appendChild(div), 0)
-    const el = await waitElement('div.foo')
+    const el = await waitElement({ selector: 'div.foo' })
     expect(el).toBe(div)
+  })
+
+  test('reject wait element after ms', async () => {
+    await expect(() =>
+      waitElement({ selector: 'div', rejectAfterMs: 100 })
+    ).rejects.toThrowError('waitElement rejected after 100ms')
   })
 })
