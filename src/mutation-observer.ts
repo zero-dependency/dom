@@ -43,7 +43,7 @@ export function observeElement<T extends Element = Element>(
 interface WaitElementParams {
   selector: string
   target?: Element
-  rejectAfterMs?: number
+  rejectTimeoutMs?: number
   signal?: AbortSignal
 }
 
@@ -59,8 +59,11 @@ interface WaitElementParams {
  * @param {Element} [params.target=document.body]
  * The target element to search for the element in.
  *
- * @param {number} [params.rejectAfterMs]
- * The time in milliseconds after which to reject the promise if the element is not found.
+ * @param {number} [params.rejectTimeoutMs]
+ * The timeout in milliseconds after which the promise is rejected.
+ *
+ * @param {AbortSignal} [params.signal]
+ * An optional AbortSignal instance to abort the waiting.
  *
  * @return {Promise<T>}
  * A promise that resolves with the found element.
@@ -74,7 +77,7 @@ interface WaitElementParams {
 export function waitElement<T extends Element = Element>({
   selector,
   target = document.body,
-  rejectAfterMs,
+  rejectTimeoutMs,
   signal
 }: WaitElementParams): Promise<T> {
   return new Promise((resolve, reject) => {
@@ -107,10 +110,10 @@ export function waitElement<T extends Element = Element>({
       reject(new Error(message))
     }
 
-    if (rejectAfterMs > 0) {
+    if (rejectTimeoutMs > 0) {
       listeners.timeout = setTimeout(
-        () => dispose(`waitElement rejected after ${rejectAfterMs}ms`),
-        rejectAfterMs
+        () => dispose(`${waitElement.name} rejected (${rejectTimeoutMs}ms)`),
+        rejectTimeoutMs
       )
     }
 
