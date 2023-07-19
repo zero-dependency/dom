@@ -67,7 +67,7 @@ export function waitElement<T extends Element = Element>({
       }
 
       disconnect()
-      reject(new Error(message))
+      reject(message)
     }
 
     if (rejectTimeoutMs > 0) {
