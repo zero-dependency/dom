@@ -1,5 +1,11 @@
 # @zero-dependency/dom
 
+## 1.8.2
+
+### Patch Changes
+
+- d90b0e2: feat(workspace): npm provenance
+
 ## 1.8.1
 
 ### Patch Changes
