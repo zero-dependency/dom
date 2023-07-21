@@ -1,5 +1,11 @@
 # @zero-dependency/dom
 
+## 1.8.4
+
+### Patch Changes
+
+- ci: set node 18
+
 ## 1.8.3
 
 ### Patch Changes
