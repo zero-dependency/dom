@@ -1,4 +1,4 @@
-import * as CSS from 'csstype'
+import type CSS from 'csstype'
 
 // prettier-ignore
 type Properties<T extends keyof HTMLElementTagNameMap> = Partial<{
