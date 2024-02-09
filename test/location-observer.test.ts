@@ -1,4 +1,5 @@
 import { describe, expect, expectTypeOf } from 'vitest'
+
 import { locationObserver } from '../src/location-observer.js'
 
 describe('locationObserver', (test) => {

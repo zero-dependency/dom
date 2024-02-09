@@ -1,4 +1,5 @@
 import { describe, expect } from 'vitest'
+
 import { observeElement } from '../src/observe-element.js'
 
 describe('observeElement', (test) => {

@@ -1,4 +1,5 @@
 import { describe, expect, expectTypeOf } from 'vitest'
+
 import { el, nbsp, text } from '../src/html.js'
 
 describe('el', (test) => {

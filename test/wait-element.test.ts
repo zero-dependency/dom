@@ -1,4 +1,5 @@
 import { describe, expect } from 'vitest'
+
 import { waitElement } from '../src/wait-element.js'
 
 describe('waitElement', (test) => {
