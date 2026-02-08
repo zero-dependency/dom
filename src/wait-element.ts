@@ -62,7 +62,7 @@ export function waitElement<T extends Element = Element>({
         clearTimeout(listeners.timeout)
       }
 
-      if (listeners.abort) {
+      if (signal && listeners.abort) {
         signal.removeEventListener('abort', listeners.abort)
       }
 
@@ -70,7 +70,7 @@ export function waitElement<T extends Element = Element>({
       reject(message)
     }
 
-    if (rejectTimeoutMs > 0) {
+    if (rejectTimeoutMs && rejectTimeoutMs > 0) {
       listeners.timeout = setTimeout(
         () => dispose(`${waitElement.name} rejected (${rejectTimeoutMs}ms)`),
         rejectTimeoutMs
