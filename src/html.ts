@@ -5,7 +5,8 @@ type Properties<T extends keyof HTMLElementTagNameMap> = Partial<{
   style: CSS.Properties
 } & Omit<HTMLElementTagNameMap[T], 'style'>>
 
-type Children = (string | Node | HTMLElement)[]
+type ChildElement = string | Node | HTMLElement
+type Childrens = ChildElement[]
 
 /**
  * Creates a new HTML element of the specified type and with the given attributes and children nodes.
@@ -13,10 +14,10 @@ type Children = (string | Node | HTMLElement)[]
  * @param {T} tag
  * The type of HTML element to create.
  *
- * @param {Properties<T> | Children | HTMLElement} [props]
+ * @param {Properties<T> | Childrens | ChildElement} [props]
  * The properties or children nodes to add to the element.
  *
- * @param {...Children} children
+ * @param {Childrens | ChildElement} [children]
  * The children nodes to add to the element.
  *
  * @return {HTMLElementTagNameMap[T]}
@@ -29,11 +30,12 @@ type Children = (string | Node | HTMLElement)[]
  * el('div', el('span', 'Hello world'))
  * el('div', el('span', 'Hello'), el('span', 'world'))
  * el('div', el('span', 'Hello world'), 'world')
+ * el('div', { id: 'foo' }, [el('span', 'Hello'), el('span', 'world')])
  */
 export function el<T extends keyof HTMLElementTagNameMap>(
   tag: T,
-  props?: Properties<T> | Children | HTMLElement,
-  ...children: Children
+  props?: Properties<T> | Childrens | ChildElement,
+  children?: Childrens | ChildElement
 ): HTMLElementTagNameMap[T] {
   const el = document.createElement(tag)
 
@@ -43,12 +45,20 @@ export function el<T extends keyof HTMLElementTagNameMap>(
     el.append(text(props))
   } else if (Array.isArray(props)) {
     el.append(...props)
-  } else {
+  } else if (props) {
     Object.assign(el, props)
     Object.assign(el.style, props?.style)
   }
 
-  el.append(...children)
+  if (children !== undefined) {
+    if (Array.isArray(children)) {
+      el.append(...children)
+    } else if (children instanceof Node) {
+      el.append(children)
+    } else if (typeof children === 'string') {
+      el.append(text(children))
+    }
+  }
 
   return el
 }
