@@ -1,5 +1,11 @@
 # @zero-dependency/dom
 
+## 1.8.5
+
+### Patch Changes
+
+- feat(el): array children elements
+
 ## 1.8.4
 
 ### Patch Changes
